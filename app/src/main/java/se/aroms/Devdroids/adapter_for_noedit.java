@@ -20,12 +20,11 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import se.aroms.R;
-
-public class adapter_for_cart extends RecyclerView.Adapter<adapter_for_cart.view_holder> {
+public class adapter_for_noedit extends RecyclerView.Adapter<adapter_for_noedit.view_holder> {
     private List<Cart_item> my_array_of_cart;
     private OnViewListener onViewListener;
     private RecyclerView.ViewHolder viewHolder;
-    public adapter_for_cart(List<Cart_item> cart_list, OnViewListener onViewListener){
+    public adapter_for_noedit(List<Cart_item> cart_list, OnViewListener onViewListener){
         my_array_of_cart= cart_list;
         this.onViewListener=onViewListener;
 
@@ -60,7 +59,7 @@ public class adapter_for_cart extends RecyclerView.Adapter<adapter_for_cart.view
             holder.progressBar.setVisibility(View.GONE);
             holder.dish_image.setImageResource(R.drawable.notavailable);
         }
-        holder.dish_name.setText(current_item.getItems().getName()+" "+current_item.getItems().getSize() );
+        holder.dish_name.setText(current_item.getItems().getName()+" "+current_item.getItems().getSize());
         holder.dish_desp.setText(current_item.getItems().getDesp());
         holder.quantity.setText(""+current_item.getQuantity());
         holder.quantityWarning.setText(current_item.getItems().getQunatity());
@@ -78,7 +77,7 @@ public class adapter_for_cart extends RecyclerView.Adapter<adapter_for_cart.view
             @Override
             public void afterTextChanged(Editable s) {
                 if(s.toString().length()>0)
-                current_item.setLocalQuantity(Integer.parseInt(s.toString()));
+                    current_item.setLocalQuantity(Integer.parseInt(s.toString()));
             }
         });
     }
@@ -112,11 +111,11 @@ public class adapter_for_cart extends RecyclerView.Adapter<adapter_for_cart.view
 
         @Override
         public void onClick(View v) {
-            onViewListener.onViewClick(getAdapterPosition());
+            onViewListener.onViewClick1(getAdapterPosition());
         }
     }
     public interface OnViewListener{
 
-        void onViewClick(int position);
+        void onViewClick1(int position);
     }
 }

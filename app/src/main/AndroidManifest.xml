@@ -9,6 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".Devdroids.EditOrders"></activity>
         <activity android:name=".Devdroids.SearchableActivity">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
@@ -38,10 +39,10 @@
         <activity android:name=".kitchenManagerCancel" />
         <activity android:name=".cookMain" />
         <activity android:name=".kitchenManagerStatus" />
-        <activity android:name=".Devdroids.MenuActivityDev" >
+        <activity android:name=".Devdroids.MenuActivityDev">
             <meta-data
-            android:name="android.app.default_searchable"
-            android:value=".Devdroids.SearchableActivity" />
+                android:name="android.app.default_searchable"
+                android:value=".Devdroids.SearchableActivity" />
         </activity>
         <activity android:name=".Devdroids.Cart" />
         <activity android:name=".kitchenManagerMain" />

@@ -67,7 +67,16 @@
             android:textColor="@color/white"
             android:id="@+id/myorder_edit"
             android:fontFamily="@font/poppins"/>
-
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add more dishes"
+            android:onClick="onOrderMoreClick"
+            android:theme="@style/AppTheme.Button"
+           android:layout_centerInParent="true"
+            android:textColor="@color/white"
+            android:id="@+id/myorder_more"
+            android:fontFamily="@font/poppins"/>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -61,6 +61,11 @@ public class MyOrders extends AppCompatActivity {
         scheduleuUpdateTime();
     }
     @Override
+    protected void onStop() {
+        super.onStop();
+        handler.removeCallbacks(r1);
+    }
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_orders);
@@ -233,6 +238,9 @@ public class MyOrders extends AppCompatActivity {
                 Toast.makeText(context, "Order in cooking queue can not be edited", Toast.LENGTH_SHORT).show();
                 return;
             }
+            Intent intent=new Intent(this,EditOrders.class);
+            startActivity(intent);
+            finish();
         }
         else
         {
@@ -297,27 +305,31 @@ public class MyOrders extends AppCompatActivity {
         remiaingTime-=TIMER/(1000*6000);
         remaining.setText("Remaining Time: "+remiaingTime);
     }
-    public void updateRemainingTime(){
-        int time=-1;
-        for(int i=0;i<Orders.get(0).getOrderItems().size();i++)
-        {
-            order_queue_items orderQueue=Orders.get(0).getOrderItems().get(i);
-            int temp=0;
-            try{
-                temp=Integer.parseInt(orderQueue.getExpected_time())+Integer.parseInt(orderQueue.getRequired_time());
+    public void updateRemainingTime() {
+        int time = -1;
+        if (Orders != null) {
+            for (int i = 0; i < Orders.get(0).getOrderItems().size(); i++) {
+                order_queue_items orderQueue = Orders.get(0).getOrderItems().get(i);
+                int temp = 0;
+                try {
+                    temp = Integer.parseInt(orderQueue.getExpected_time()) + Integer.parseInt(orderQueue.getRequired_time());
 
-            }
-            catch (Exception ex)
-            {
-              temp=-1;
-            }
-            if(temp!=-1){
-                if(time<temp){
-                    time=temp;
+                } catch (Exception ex) {
+                    temp = -1;
+                }
+                if (temp != -1) {
+                    if (time < temp) {
+                        time = temp;
+                    }
                 }
             }
+            remiaingTime = time;
+            remaining.setText("Remaining Time: " + remiaingTime);
         }
-        remiaingTime=time;
-        remaining.setText("Remaining Time: "+remiaingTime);
+    }
+    public void onOrderMoreClick(View v)
+    {
+        Intent intent=new Intent(this,MenuActivityDev.class);
+        startActivity(intent);
     }
 }
