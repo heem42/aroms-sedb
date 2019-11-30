@@ -290,6 +290,7 @@ public class MyOrders extends AppCompatActivity {
         Intent intent=new Intent(this,BillPayment.class);
         intent.putExtra("order",orders);
         startActivity(intent);
+        finish();
     }
 
     public void scheduleuUpdateTime() {
@@ -302,7 +303,9 @@ public class MyOrders extends AppCompatActivity {
         handler.postDelayed(r1, TIMER);
     }
     public void updateTime(){
-        remiaingTime-=TIMER/(1000*6000);
+        if(remiaingTime>0) {
+            remiaingTime -= 1;
+        }
         remaining.setText("Remaining Time: "+remiaingTime);
     }
     public void updateRemainingTime() {
@@ -331,5 +334,6 @@ public class MyOrders extends AppCompatActivity {
     {
         Intent intent=new Intent(this,MenuActivityDev.class);
         startActivity(intent);
+        finish();
     }
 }

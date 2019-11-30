@@ -245,6 +245,7 @@ public class Cart extends AppCompatActivity implements adapter_for_cart.OnViewLi
                             cartDB.child(auth.getUid()).removeValue();
                             Intent intent = new Intent(context, MyOrders.class);
                             startActivity(intent);
+                            finish();
 
                         }
                     });
@@ -258,6 +259,7 @@ public class Cart extends AppCompatActivity implements adapter_for_cart.OnViewLi
                     editDB.child(key).setValue(new editOrder(myorder.getOrderId(), "1"));
                     Intent intent = new Intent(context, MyOrders.class);
                     startActivity(intent);
+                    finish();
                 }
             }
         }

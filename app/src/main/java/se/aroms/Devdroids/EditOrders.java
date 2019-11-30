@@ -399,4 +399,9 @@ public class EditOrders extends AppCompatActivity implements adapter_for_cart.On
             InventoryDB.child(inventory_items.get(changedindex.get(i)).uid).setValue(inventory_items.get(changedindex.get(i)));
         }
     }
+    public void onEditOrderBack(View v){
+        Intent intent=new Intent(this,MyOrders.class);
+        startActivity(intent);
+        finish();
+    }
 }
