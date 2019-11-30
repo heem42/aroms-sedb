@@ -108,7 +108,7 @@ public class Login extends AppCompatActivity {
                                                 startActivity(intent);
 
                                             } else if (roleSelected.equals("Kitchen Manager")) {
-                                                Intent intent = new Intent(getBaseContext(), kitchenManagerMain.class);
+                                                Intent intent = new Intent(getBaseContext(), specializeMain.class);
                                                 startActivity(intent);
                                             } else if (roleSelected.equals("Customer")) {
                                                 Intent intent = new Intent(getBaseContext(), MenuActivityDev.class);
