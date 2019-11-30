@@ -10,18 +10,25 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+import se.aroms.Devdroids.Orders;
+
 public class WeeklyReportFragment extends Fragment {
 
-    private ArrayList<Order> orders;
+    private ArrayList<Orders> orders;
+    DatabaseReference usersDB;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -31,30 +38,38 @@ public class WeeklyReportFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        Bundle bundle = this.getArguments();
-        if(bundle != null){
-            orders = (ArrayList<Order>) bundle.getSerializable("orders");
-        }
-        computeSalesAndProfit();
+        orders = new ArrayList<>();
+        usersDB = FirebaseDatabase.getInstance().getReference("Orders");
+        getOrdersDetails();
+    }
+
+    void getOrdersDetails(){
+        usersDB.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot i: dataSnapshot.getChildren()){
+                    orders.add(i.getValue(Orders.class));
+                }
+                computeSalesAndProfit();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     void computeSalesAndProfit(){
 
-        Date temp = null;
-        SimpleDateFormat dateformat2 = new SimpleDateFormat("dd-MM-yyyy");
-        try {
-            temp = dateformat2.parse("19-11-2019");
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
+        Date currDate = new Date();
         double []sales = new double[7];
         double []incurredCosts = new double[7];
         double []profit = new double[7];
         for(int i=0; i < orders.size(); i++){
-            long diffInMillies = Math.abs(temp.getTime() - orders.get(i).getOrderTime().getTime());
+            long diffInMillies = Math.abs(currDate.getTime() - orders.get(i).getOrderTIme().getTime());
             long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
-            if(diff <=6){
+            if(diff <=6 && orders.get(i).getStatus() == 0){
                 int index = (int)diff;
                 for(int j=0; j < orders.get(i).getOrderItems().size(); j++){
                     sales[index] = sales[index] + orders.get(i).getOrderItems().get(j).getPrice();
@@ -65,6 +80,8 @@ public class WeeklyReportFragment extends Fragment {
 
         for(int i=0; i < 7; i++){
             profit[i] = ((sales[i] - incurredCosts[i])/sales[i]) * 100;
+            if(Double.isNaN(profit[i]))
+                profit[i] = 0.00;
         }
 
         GraphView salesGraph = (GraphView) getView().findViewById(R.id.salesGraph);
@@ -88,31 +105,5 @@ public class WeeklyReportFragment extends Fragment {
 
         salesGraph.addSeries(salesLine);
         profitGraph.addSeries(profitLine);
-
-    }
-
-
-    void displaySalesAndProfit(){
-        GraphView graph = (GraphView) getView().findViewById(R.id.salesGraph);
-        LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[] {
-                new DataPoint(0, 1),
-                new DataPoint(1, 5),
-                new DataPoint(2, 3),
-                new DataPoint(3, 2),
-                new DataPoint(4, 6)
-        });
-        series.setColor(Color.RED);
-        graph.addSeries(series);
-
-        GraphView graph2 = (GraphView) getView().findViewById(R.id.profitGraph);
-        LineGraphSeries<DataPoint> series2 = new LineGraphSeries<>(new DataPoint[] {
-                new DataPoint(0, 1),
-                new DataPoint(1, 5),
-                new DataPoint(2, 3),
-                new DataPoint(3, 2),
-                new DataPoint(4, 6)
-        });
-        series2.setColor(Color.RED);
-        graph2.addSeries(series2);
     }
 }
