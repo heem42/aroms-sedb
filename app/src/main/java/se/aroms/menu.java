@@ -81,6 +81,7 @@ public class menu extends AppCompatActivity {
 
     }
 
+
     @Override
     protected void onStop() {
         if(mFirebaseAdapter!=null)
@@ -156,6 +157,7 @@ public class menu extends AppCompatActivity {
                     i.putExtra("time",a.getTime());
                     i.putExtra("description",a.getDescription());
                     i.putExtra("type",a.getType());
+                    i.putExtra("picture",a.getPicture());
 
                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);;
                     c.startActivity(i);
