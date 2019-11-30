@@ -3,9 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/AROMS.iml" filepath="$PROJECT_DIR$/AROMS.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/AROMS-app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/AROMS-app.iml" group="AROMS/app" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/aroms-sedb-AROMS.iml" filepath="$PROJECT_DIR$/.idea/modules/aroms-sedb-AROMS.iml" group="AROMS" />
     </modules>
   </component>
 </project>

@@ -57,6 +57,7 @@
         android:layout_marginTop="25dp"
         android:entries="@array/Persons"
         android:theme="@style/AppTheme.Spinner"
+        android:dropDownWidth="210dp"
         app:layout_constraintStart_toEndOf="@id/loginAs"
         app:layout_constraintTop_toBottomOf="@id/password" />
 
