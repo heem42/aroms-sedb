@@ -273,4 +273,12 @@ public class Dish_Details extends AppCompatActivity {
     {
 
     }
+    public void onMenu_DetailCartClick(View v){
+        Intent intent=new Intent(Dish_Details.this, Cart.class);
+
+        startActivity(intent);
+    }
+    public void onMenuDeatilCartBack(View v){
+        onBackPressed();
+    }
 }

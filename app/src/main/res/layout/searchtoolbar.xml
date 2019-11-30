@@ -7,10 +7,7 @@
     android:layout_width="match_parent"
     android:minHeight="?attr/actionBarSize"
     android:background="#CC0000"
-    android:id="@+id/toolbar_menudetail">
-
-
-
+    android:id="@+id/toolbar1">
 
     <LinearLayout
         android:gravity="center"
@@ -24,13 +21,10 @@
             android:layout_height="match_parent"
             android:orientation="horizontal"
             android:layout_margin="10dp">
-            <ImageView
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/backarrow"
-                android:onClick="onMenuDeatilCartBack"
-                android:layout_marginStart="10dp"
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 />
         </LinearLayout>
 
@@ -48,7 +42,7 @@
                 <TextView
                     android:layout_width="16dp"
                     android:layout_height="16dp"
-                    android:id="@+id/cartNo1"
+                    android:id="@+id/search_cart"
                     android:text=" 0"
                     android:layout_gravity="center"
                     android:textColor="#ffff"
@@ -61,11 +55,9 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/cart"
                 android:id="@+id/cart_main"
-                android:onClick="onMenu_DetailCartClick"
                 />
         </LinearLayout>
     </LinearLayout>
-
 
 
 </androidx.appcompat.widget.Toolbar>

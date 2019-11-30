@@ -4,55 +4,64 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/logo_1"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SpecializeOrder"></activity>
-        <activity android:name=".SalesAndReport"></activity>
+        <activity android:name=".Devdroids.SearchableActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
 
-        <activity android:name=".assign_role"></activity>
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:value=".Devdroids.SearchableActivity" />
+        </activity>
+        <activity android:name=".Devdroids.BillPayment" />
+        <activity android:name=".SpecializeOrder" />
+        <activity android:name=".SalesAndReport" />
+        <activity android:name=".assign_role" />
         <activity android:name=".SalesReport" />
         <activity android:name=".MainActivity" />
-        <activity android:name=".add_user"></activity>
+        <activity android:name=".add_user" />
         <activity android:name=".Login">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".kitchenManagerCancel" />
         <activity android:name=".cookMain" />
         <activity android:name=".kitchenManagerStatus" />
-        <activity android:name=".Devdroids.MenuActivityDev" />
+        <activity android:name=".Devdroids.MenuActivityDev" >
+            <meta-data
+            android:name="android.app.default_searchable"
+            android:value=".Devdroids.SearchableActivity" />
+        </activity>
         <activity android:name=".Devdroids.Cart" />
         <activity android:name=".kitchenManagerMain" />
         <activity android:name=".Devdroids.Dish_Details" />
         <activity android:name=".Devdroids.MyOrders" />
         <activity android:name=".Dishes" />
-
-        <activity android:name=".edit_dish"></activity>
-        <activity android:name=".add_dish_ingredient"></activity>
-        <activity android:name=".add_menu"></activity>
-        <activity android:name=".menu"></activity>
-        <activity android:name=".edit_inventory"></activity>
-        <activity android:name=".add_inventory"></activity>
-        <activity android:name=".inventory"></activity>
-
-
-        <activity android:name=".inventory_manager_main_page">
-            
-        </activity>
-
-        <activity android:name=".payment"></activity>
+        <activity android:name=".edit_dish" />
+        <activity android:name=".add_dish_ingredient" />
+        <activity android:name=".add_menu" />
+        <activity android:name=".menu" />
+        <activity android:name=".edit_inventory" />
+        <activity android:name=".add_inventory" />
+        <activity android:name=".inventory" />
+        <activity android:name=".inventory_manager_main_page" />
+        <activity android:name=".payment" />
         <activity android:name=".ready_to_serve" />
         <activity android:name=".waiters" />
         <activity android:name=".tablets" />
         <activity android:name=".View_tables" />
-        <activity android:name=".Hall_Manager_Main">
-        </activity>
-        
+        <activity android:name=".Hall_Manager_Main" />
 
         <meta-data
             android:name="preloaded_fonts"

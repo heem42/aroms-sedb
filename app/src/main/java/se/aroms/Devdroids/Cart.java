@@ -6,7 +6,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -19,6 +21,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.EventListener;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -32,10 +35,13 @@ public class Cart extends AppCompatActivity implements adapter_for_cart.OnViewLi
     Context context;
     DatabaseReference cartDB;
     DatabaseReference orderDB;
+    DatabaseReference editDB;
     DatabaseReference menuDB;
     DatabaseReference IngredientsDB;
     DatabaseReference InventoryDB;
     List<Cart_item> CartItems;
+    order_queue myorder;
+    TextView empty;
     List<Dishes> dishes;
     List<inventory_item> inventory_items;
     List<Ingredients> ingredients;
@@ -51,12 +57,30 @@ public class Cart extends AppCompatActivity implements adapter_for_cart.OnViewLi
         ingredients=new ArrayList<>();
         dishes=new ArrayList<>();
         auth=FirebaseAuth.getInstance();
+        editDB = FirebaseDatabase.getInstance().getReference().child("Edited Order");
+    empty=findViewById(R.id.empty_cart);
         cartDB = FirebaseDatabase.getInstance().getReference().child("Cart");
         orderDB = FirebaseDatabase.getInstance().getReference().child("Orders Queue");
         menuDB = FirebaseDatabase.getInstance().getReference().child("Menu");
         IngredientsDB=FirebaseDatabase.getInstance().getReference().child("Ingredients");
         InventoryDB=FirebaseDatabase.getInstance().getReference().child("Inventory");
         context=this;
+        orderDB.orderByChild("uid").equalTo(auth.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    order_queue order = (postSnapshot.getValue(order_queue.class));
+                    if (order.getComplimentaryDish().compareTo("NONE") == 0 && order.getOrder_status().compareTo("-1") != 0) {
+                        myorder = order;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
         cartDB.child(auth.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -66,6 +90,10 @@ public class Cart extends AppCompatActivity implements adapter_for_cart.OnViewLi
                         CartItems.add(postSnapshot.getValue(Cart_item.class));
 
                     }
+                    if(CartItems.size()>0)
+                    {
+                        empty.setVisibility(View.INVISIBLE);
+                    }
                     adapter_cart.notifyDataSetChanged();
                     dishes.clear();
                     ingredients.clear();
@@ -73,8 +101,15 @@ public class Cart extends AppCompatActivity implements adapter_for_cart.OnViewLi
                         menuDB.child(CartItems.get(i).getItems().getItemID()).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                                dishes.add(dataSnapshot.getValue(Dishes.class));
+                                boolean found=false;
+                                Dishes dish=dataSnapshot.getValue(Dishes.class);
+                                for(int i=0;i<dishes.size();i++)
+                                {
+                                    if(dishes.get(i).getUid().compareTo(dish.getUid())==0)
+                                        found=true;
+                                }
+                                if(!found)
+                                    dishes.add(dish);
 
                             }
 
@@ -91,7 +126,15 @@ public class Cart extends AppCompatActivity implements adapter_for_cart.OnViewLi
                                 Iterator<Map.Entry<String, String>> itr = obj.entrySet().iterator();
                                 while (itr.hasNext()) {
                                     Map.Entry<String, String> entry = itr.next();
-                                    ingredients.add(new Ingredients(entry.getKey(), entry.getValue(), dataSnapshot.getRef().getKey()));
+                                    Ingredients ingredient=new Ingredients(entry.getKey(), entry.getValue(), dataSnapshot.getRef().getKey());
+                                    boolean found=false;
+                                    for(int i=0;i<ingredients.size();i++)
+                                    {
+                                        if(ingredients.get(i).getDishId().compareTo(ingredient.getDishId())==0 && ingredient.getId().compareTo(ingredients.get(i).getId())==0)
+                                            found=true;
+                                    }
+                                    if(!found)
+                                        ingredients.add(ingredient);
                                 }
                                 updateMaxQuantity();
                                 loadInventory();
@@ -152,45 +195,75 @@ public class Cart extends AppCompatActivity implements adapter_for_cart.OnViewLi
     }
     public void OnOrderClick (View view)
     {
-        boolean exit=false;
-        final List<order_queue_items> orderItems;
-        orderItems=new ArrayList<>();
-        for(int i=0;i<CartItems.size();i++){
-            CartItems.get(i).getItems().setQunatity("");
-        }
-        for(int i=0;i<CartItems.size();i++)
-        {
-            if(CartItems.get(i).getLocalQuantity()>CartItems.get(i).getMaxQuantity()){
-                CartItems.get(i).getItems().setQunatity("*Maximum Quantity that can be ordered for this item is "+CartItems.get(i).getMaxQuantity());
-                adapter_cart.notifyDataSetChanged();
-                orderItems.clear();
-                exit=true;
-                break;
+        if(CartItems.size()>0) {
+            boolean exit = false;
+            final List<order_queue_items> orderItems;
+            orderItems = new ArrayList<>();
+            for (int i = 0; i < CartItems.size(); i++) {
+                CartItems.get(i).getItems().setQunatity("");
             }
-            for(int j=0;j<CartItems.get(i).getQuantity();j++)
-            orderItems.add(new order_queue_items(CartItems.get(i).getItems().getItemID(),CartItems.get(i).getItems().getSize(),"0",CartItems.get(i).getItems().getTime(),"0",50.0));
-        }
-        if(exit==false) {
-            for(int i=0;i<CartItems.size();i++){
-                if(CartItems.get(i).getLocalQuantity()<CartItems.get(i).getQuantity()){
-                    //user has decreased quantity add back inventory
-                    addBackInventory(CartItems.get(i).getItems().getItemID(),CartItems.get(i).getQuantity()-CartItems.get(i).getLocalQuantity());
+            int quantity;
+
+            for (int i = 0; i < CartItems.size(); i++) {
+                if(CartItems.get(i).getLocalQuantity()!=0)
+                {
+                    quantity=CartItems.get(i).getLocalQuantity();
                 }
-                else if(CartItems.get(i).getLocalQuantity()>CartItems.get(i).getQuantity()){
-                    //user has increased quantity
-                    removeInventory(CartItems.get(i).getItems().getItemID(),CartItems.get(i).getLocalQuantity()-CartItems.get(i).getQuantity());
+                else
+                {
+                    quantity=CartItems.get(i).getQuantity();
                 }
+                if (quantity > CartItems.get(i).getMaxQuantity()) {
+                    CartItems.get(i).getItems().setQunatity("*Maximum Quantity that can be ordered for this item is " + CartItems.get(i).getMaxQuantity());
+                    adapter_cart.notifyDataSetChanged();
+                    orderItems.clear();
+                    exit = true;
+                    break;
+                }
+
+                for (int j = 0; j < quantity; j++)
+                    orderItems.add(new order_queue_items(CartItems.get(i).getItems().getItemID(), CartItems.get(i).getItems().getSize(), "0", CartItems.get(i).getItems().getTime(), "0", 50.0));
             }
-            order_queue orderQueue = new order_queue(new Date(), orderItems, "hell", auth.getUid(), "0", "normal", "NONE");
-            String key = orderDB.push().getKey();
-            orderQueue.setOrderId(key);
-            orderDB.child(key).setValue(orderQueue).addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                    Toast.makeText(context, "Orders Placed", Toast.LENGTH_SHORT).show();
+            if (exit == false) {
+                for (int i = 0; i < CartItems.size(); i++) {
+                    if (CartItems.get(i).getLocalQuantity() < CartItems.get(i).getQuantity() && CartItems.get(i).getLocalQuantity()!=0) {
+                        //user has decreased quantity add back inventory
+                        addBackInventory(CartItems.get(i).getItems().getItemID(), CartItems.get(i).getQuantity() - CartItems.get(i).getLocalQuantity());
+                    } else if (CartItems.get(i).getLocalQuantity() > CartItems.get(i).getQuantity() && CartItems.get(i).getLocalQuantity()!=0) {
+                        //user has increased quantity
+                        removeInventory(CartItems.get(i).getItems().getItemID(), CartItems.get(i).getLocalQuantity() - CartItems.get(i).getQuantity());
+                    }
+                }
+                if (myorder == null) {
+                    order_queue orderQueue = new order_queue(new Date(), orderItems, "hell", auth.getUid(), "0", "0", "NONE");
+                    String key = orderDB.push().getKey();
+                    orderQueue.setOrderId(key);
+                    orderDB.child(key).setValue(orderQueue).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Toast.makeText(context, "Orders Placed", Toast.LENGTH_SHORT).show();
+                            cartDB.child(auth.getUid()).removeValue();
+                            Intent intent = new Intent(context, MyOrders.class);
+                            startActivity(intent);
+
+                        }
+                    });
+                } else {
+                    for (int i = 0; i < orderItems.size(); i++) {
+                        myorder.getOrderItems().add(orderItems.get(i));
+                    }
                     cartDB.child(auth.getUid()).removeValue();
+                    orderDB.child(myorder.getOrderId()).setValue(myorder);
+                    String key = editDB.push().getKey();
+                    editDB.child(key).setValue(new editOrder(myorder.getOrderId(), "1"));
+                    Intent intent = new Intent(context, MyOrders.class);
+                    startActivity(intent);
                 }
-            });
+            }
+        }
+        else
+        {
+            Toast.makeText(context, "Please add items in cart", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -278,6 +351,9 @@ public class Cart extends AppCompatActivity implements adapter_for_cart.OnViewLi
             }
             CartItems.get(i).setMaxQuantity(available_quantity+CartItems.get(i).getQuantity());
         }
+    }
+    public void onCartBack(View v){
+        onBackPressed();
     }
 
 }

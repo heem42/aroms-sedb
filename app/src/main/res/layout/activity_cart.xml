@@ -11,11 +11,23 @@
         layout="@layout/cart_toolbar"
         >
     </include>
+
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/cart_recylcerview"
         android:layout_below="@id/cart_toolbar"
+        android:layout_marginBottom="50dp"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Empty Cart :("
+        android:id="@+id/empty_cart"
+        android:layout_centerInParent="true"
+        android:layout_below="@id/cart_recylcerview"
+        android:textSize="24sp"
+
         />
     <LinearLayout
         android:layout_width="match_parent"

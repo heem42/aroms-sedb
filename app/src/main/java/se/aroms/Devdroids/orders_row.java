@@ -4,11 +4,13 @@ public class orders_row {
     private String dishName;
     private String quantity;
     private String dishId;
+    private String size;
 
-    public orders_row(String dishName, String quantity, String dishId) {
+    public orders_row(String dishName, String quantity, String dishId,String size) {
         this.dishName = dishName;
         this.quantity = quantity;
         this.dishId = dishId;
+        this.size=size;
     }
     public orders_row(){
 
@@ -16,6 +18,14 @@ public class orders_row {
 
     public String getDishName() {
         return dishName;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
     }
 
     public void setDishName(String dishName) {

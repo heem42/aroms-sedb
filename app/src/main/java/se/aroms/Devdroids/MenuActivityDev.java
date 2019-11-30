@@ -4,14 +4,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -29,11 +33,12 @@ import java.util.Map;
 import se.aroms.R;
 import se.aroms.inventory_item;
 
-public class MenuActivityDev extends AppCompatActivity implements adapter_for_dishes.OnViewListener {
+public class MenuActivityDev extends AppCompatActivity implements adapter_for_dishes.OnViewListener,NavigationView.OnNavigationItemSelectedListener {
     List<inventory_item> inventory_items;
     List<Dishes> Items;
     List<Ingredients> ingredients;
     FirebaseAuth auth;
+    DrawerLayout drawer;
     Context context;
     DatabaseReference cartDB;
     TextView orderNo;
@@ -51,7 +56,11 @@ public class MenuActivityDev extends AppCompatActivity implements adapter_for_di
         //getSupportActionBar().hide();
         //Toast.makeText(this,"Hi",Toast.LENGTH_LONG).show();
 //        Intent intent=new Intent(MainActivity.this, Dishes.class);
-//        startActivity(intent);
+//
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.bringToFront();
+        navigationView.setNavigationItemSelectedListener(this);
+        drawer=findViewById(R.id.drawer_layout);
         Items=new ArrayList<>();
         CartItems=new ArrayList<>();
         orderNo=findViewById(R.id.cartNo);
@@ -253,9 +262,10 @@ public class MenuActivityDev extends AppCompatActivity implements adapter_for_di
     @Override
     public void onViewClick(int position) {
         Intent intent=new Intent(MenuActivityDev.this, Dish_Details.class);
-        //Intent intent=new Intent(MenuActivityDev.this, MyOrders.class);
         intent.putExtra("item",Items.get(position));
         startActivity(intent);
+        //Intent intent=new Intent(MenuActivityDev.this, MyOrders.class);
+        //startActivity(intent);
 
     }
     public void onCartClick(View v)
@@ -264,5 +274,28 @@ public class MenuActivityDev extends AppCompatActivity implements adapter_for_di
 
         startActivity(intent);
     }
+    public void onSearchClick(View v){
+        Toast.makeText(context,"orking",Toast.LENGTH_SHORT).show();
+        onSearchRequested();
 
+    }
+public void onMenuClick(View v)
+{
+    drawer.openDrawer(Gravity.LEFT);
+}
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        menuItem.setChecked(false);
+        if(menuItem.getItemId()==R.id.nav_Cart)
+        {startActivity(new Intent(this,Cart.class));
+            return true;
+
+        }
+        if(menuItem.getItemId()==R.id.nav_Orders)
+        {
+            startActivity(new Intent(this,MyOrders.class));
+            return true;
+        }
+        return false;
+    }
 }

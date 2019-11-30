@@ -28,6 +28,7 @@ public class adapter_for_orders  extends RecyclerView.Adapter<adapter_for_orders
        orders_row current_item = Orders.get(position);
        holder.dish_name.setText(current_item.getDishName());
        holder.quantity.setText(current_item.getQuantity());
+       holder.size.setText(current_item.getSize());
     }
 
     @Override
@@ -38,10 +39,12 @@ public class adapter_for_orders  extends RecyclerView.Adapter<adapter_for_orders
     public static class view_holder extends RecyclerView.ViewHolder{
         public TextView dish_name;
         public TextView quantity;
+        public TextView size;
         public view_holder(View itemView)  {
             super(itemView);
             dish_name = itemView.findViewById(R.id.order_title);
             quantity=itemView.findViewById(R.id.order_quantity);
+            size=itemView.findViewById(R.id.order_size);
         }
     }
 
