@@ -43,6 +43,10 @@ public class MyOrders extends AppCompatActivity {
     FirebaseAuth auth;
     boolean orderReady;
     Context context;
+    ValueEventListener order_listner;
+    ValueEventListener menu_listner;
+    ValueEventListener ingredients_listner;
+    ValueEventListener inventory_listner;
     Button editOrder;
     Runnable r1;
     boolean disable=true;
@@ -88,7 +92,7 @@ public class MyOrders extends AppCompatActivity {
         cartDB = FirebaseDatabase.getInstance().getReference().child("Cart");
         menuDB=FirebaseDatabase.getInstance().getReference().child("Menu");
 
-        orderQueue.orderByChild("uid").equalTo(auth.getUid()).addValueEventListener(new ValueEventListener() {
+        order_listner=orderQueue.orderByChild("uid").equalTo(auth.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Orders.clear();
@@ -251,6 +255,7 @@ public class MyOrders extends AppCompatActivity {
     }
     public void pushInOrders() {
         orderReady=false;
+        orderQueue.removeEventListener(order_listner);
         handler.removeCallbacks(r1);
         List<order_queue_items> orderItems = Orders.get(0).getOrderItems();
         List<orders_items> items;
