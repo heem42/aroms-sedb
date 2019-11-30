@@ -49,7 +49,9 @@ public class Login extends AppCompatActivity {
 
         loginBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                loginAuthenticate();
+                Intent intent = new Intent(getBaseContext(),Hall_Manager_Main.class);
+                startActivity(intent);
+                //loginAuthenticate();
             }
         });
     }

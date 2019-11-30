@@ -17,6 +17,8 @@
         <item>Complimentary</item>
     </string-array>
 
+
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="menue">Menu</string>
@@ -57,4 +59,18 @@
         <item>Customer</item>
         <item>Chef</item>
     </string-array>
+
+
+
+
+    <array name="CategList">
+        <item>Assign Table to Waiter</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+
+
+    </array>
 </resources>
