@@ -83,14 +83,43 @@ public class chef_edit_adapter extends RecyclerView.Adapter<chef_edit_adapter.ch
                 f.setOrder_id(dstoreinadapter.getorder_id());
 
                 An.child(mUploads.get(pos).getKey()).child("dishes").child(uploaddishId).setValue(f);
+                final DatabaseReference An1 =FirebaseDatabase.getInstance().getReference("chef");
+final String l=mUploads.get(pos).getKey();
+                FirebaseDatabase.getInstance().getReference().child("chef").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot12) {
+                        for (DataSnapshot ds12 : dataSnapshot12.getChildren()) {
+                            chef_list n = ds12.getValue(chef_list.class);
+                                if(ds12.getKey().equalsIgnoreCase(l))
+                                {
+                                    long q=n.getQueue();
+                                    q=q+1;
+                                    An1.child(l).child("queue").setValue(q);
+
+                                }
+                        }
+                    }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
+//                ;
+
+                    //long q=n.getQueue();
+                    //  q=q+1;
+
+                    //An1.child(mUploads.get(pos).getKey()).child("queue").setValue(q);
+
 
                 //delete from chef
 
-                deletefromchef(dstoreinadapter);
+                deletefromchef(dstoreinadapter,mUploads.get(pos).getKey());
             }
         }
 
-    private void deletefromchef(final dishlist3 dstoreinadapter) {
+    private void deletefromchef(final dishlist3 dstoreinadapter,final String pos) {
         final DatabaseReference An1 =FirebaseDatabase.getInstance().getReference("chef");
 
         FirebaseDatabase.getInstance().getReference().child("chef").addValueEventListener(new ValueEventListener() {
@@ -98,6 +127,10 @@ public class chef_edit_adapter extends RecyclerView.Adapter<chef_edit_adapter.ch
             public void onDataChange(DataSnapshot dataSnapshot12) {
                 for (DataSnapshot ds12 : dataSnapshot12.getChildren()) {
                     chef_list n = ds12.getValue(chef_list.class);
+    //if(pos.equalsIgnoreCase(ds12.getKey())) {
+    //  long q = n.getQueue();
+    //An1.child(pos).child("queue").setValue(q + 1);
+    //}
 
                     if (dstoreinadapter.getChefid().equalsIgnoreCase(ds12.getKey())) {
 
@@ -106,10 +139,13 @@ public class chef_edit_adapter extends RecyclerView.Adapter<chef_edit_adapter.ch
                             dish_list2 d = n.getDishes().get(key11);
 
                             if (d.getOrder_id().equalsIgnoreCase(dstoreinadapter.order_id) && d.getDish().equalsIgnoreCase(dstoreinadapter.dishid)) {
-                                An1.child(dstoreinadapter.getChefid()).child("dishes").child(key11).removeValue();
-                                Intent intent = new Intent(mContext.getApplicationContext(), chef.class);
+                                      An1.child(dstoreinadapter.getChefid()).child("dishes").child(key11).removeValue();
+                                      long q = n.getQueue();
+                                      q = q - 1;
+                                      An1.child(dstoreinadapter.getChefid()).child("queue").setValue(q);
+                                  Intent intent = new Intent(mContext.getApplicationContext(), chef.class);
                                 mContext.startActivity(intent);
-                            }// final  DatabaseReference An=FirebaseDatabase.getInstance().getReference().child("chef");
+                            }
                         }
 
                     }

@@ -55,7 +55,7 @@ public class Login extends AppCompatActivity {
 
 
     private void loginAuthenticate() {
-        String emailTxt = email.getText().toString();
+        final String emailTxt = email.getText().toString();
         String passwordTxt = password.getText().toString();
         boolean isFill = false;
         if (emailTxt.isEmpty()) {
@@ -112,6 +112,7 @@ public class Login extends AppCompatActivity {
                                                 startActivity(intent);
                                             } else if (roleSelected.equals("Chef")){
                                                 Intent intent = new Intent(getBaseContext(), chef_display.class);
+                                                intent.putExtra("email",emailTxt);//chef email address
                                                 startActivity(intent);
                                             }
                                         } else {

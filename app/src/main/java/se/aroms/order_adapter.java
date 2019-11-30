@@ -1,6 +1,5 @@
 package se.aroms;
-
-import se.aroms.dish_list2;
+import com.example.aroms.dish_list2;
 import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -25,243 +24,145 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 public class order_adapter extends RecyclerView.Adapter<order_adapter.orderViewHolder>  {
-   private DatabaseReference mDatabaseRef;
-    private RecyclerView mRecyclerView;
-    private order_adapter mAdapter;
-    TextView tv;
-    private List<order> mUploads;
-    private DatabaseReference mDatabase;
-private int i2;
-// ...
+    private Context mContext;
+    //  public RadioGroup radioButton;
+    //   private List<order> mUploads;
+    private List<myorder> mUploads;
+    private RadioButton lastCheckedRB,r1,r2,r3;
+    public order_adapter(Context context, List<myorder> uploads) {
+        mContext = context;
+        mUploads = uploads;
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_order_details);
+    public order_adapter.orderViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(mContext).inflate(R.layout.activity_row, parent, false);
+        return new order_adapter.orderViewHolder(v);
+    }
 
-        mRecyclerView = findViewById(R.id.rcv);
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mUploads = new ArrayList<>();
+    @Override
+    public void onBindViewHolder(final order_adapter.orderViewHolder holder, int position) {
 
-        FirebaseApp.initializeApp(this);
-        final List<order> Orders;// list of orders
-        final List<myorder> o;///////
-        Orders=new ArrayList<>();
+        myorder uploadCurrent = mUploads.get(position);
 
-        o=new ArrayList<>();
-        FirebaseDatabase.getInstance().getReference().child("Orders Queue").orderByChild("order_status").addListenerForSingleValueEvent(new ValueEventListener() {
+        holder.order.setText(uploadCurrent.getOrderid());
+        holder.item.setText(uploadCurrent.getItemid());
+        final int itemind=uploadCurrent.itemindex;
+        ///read database .check(database value)
+        //  lastCheckedRB = (RadioButton) findViewById(R.id.rb1);
+        holder.radioButton.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Orders.clear();
-                for (final DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    final order n=postSnapshot.getValue(order.class);
-                    Orders.add(n);
-                    //r
-                    //  orderQueue.child(n.getOrderId()).child("order_status").setValue("0");
-                    int s= Integer.valueOf( n.getOrder_status());
-                    if(s!=2)// not complete
-                    {
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                int selectedId = group.getCheckedRadioButtonId();
+                // find the radiobutton by returned id
+               // Toast.makeText(mContext,"okay",Toast.LENGTH_SHORT).show();
+                if(checkedId==R.id.rb2)
+                {
+                    DatabaseReference ref= FirebaseDatabase.getInstance().getReference().child("Orders Queue");
+                    ref.child(holder.order.getText().toString()).child("orderItems").child(Integer.toString(itemind)).child("status").setValue("1");
+                    ref.child(holder.order.getText().toString()).child("order_status").setValue("1");
+           //         Toast.makeText(mContext,holder.order.getText().toString(),Toast.LENGTH_SHORT).show();
+                    ///////////////////
 
-                        int size = n.getOrderItems().size();
-                        for (int ii = 0; ii <size; ii++) {
-                            i2=ii;
+                    //////////////////
+r2.setEnabled(false);
+                }
+                else if(checkedId==R.id.rb3)
+                {
+                    r3.setEnabled(false);
+final              DatabaseReference ref= FirebaseDatabase.getInstance().getReference().child("Orders Queue");
+                    ref.child(holder.order.getText().toString()).child("orderItems").child(Integer.toString(itemind)).child("status").setValue("2");
+                    DatabaseReference ref2= FirebaseDatabase.getInstance().getReference().child("chef");
 
-
-
-                            final item i = n.getOrderItems().get(ii);
-
-                            final String ordind=n.getOrderId();
-                            final int index=ii;
-                            final   myorder m = new myorder(n.getOrderId(), i.getItemID(),ii);
-                            //,i.;
-                            //   if(m.complete!=2)
-                            o.add(m);
-                            ///////////////////////////////////chef read "for dish 1 "
-                            final DatabaseReference chefQueue=FirebaseDatabase.getInstance().getReference().child("chef");
-                            chefQueue.addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot dataSnapshot1) {
-
-                                    for (DataSnapshot postSnapshot1 : dataSnapshot1.getChildren() ) {
-
-                                        chef_list n1=postSnapshot1.getValue(chef_list.class);
+                    FirebaseDatabase.getInstance().getReference().child("chef").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot12) {
+                            for (DataSnapshot ds12 : dataSnapshot12.getChildren()) {
+                                chef_list n = ds12.getValue(chef_list.class);
+                              final  String chefkey=ds12.getKey();
 
 
+                                for (final String key11 : n.getDishes().keySet()) {
 
-                                        DatabaseReference An = FirebaseDatabase.getInstance().getReference("chef");
-                                        String uploadId = An.push().getKey();
-                                        String key =postSnapshot1.getKey();
-                                        Long queue=n1.getQueue();
-                                        if (i.getStatus().equalsIgnoreCase("-1"))//check status -1 //find chef details and remove it
-                                        {
+                                    dish_list2 d = n.getDishes().get(key11);
 
-                                       //     Toast.makeText(getBaseContext(), "status -1!!!!!!!!!!!"+i.getStatus(), Toast.LENGTH_SHORT).show();
+                                    if (d.getOrder_id().equalsIgnoreCase(holder.order.getText().toString()) &&d.getDish().equalsIgnoreCase(Integer.toString(itemind)))
+                                    {
+                                        FirebaseDatabase.getInstance().getReference().child("chef").child(chefkey).child("dishes").child(key11).removeValue();
+                                        int que=Integer.parseInt(n.queue.toString())-1;
+                                        FirebaseDatabase.getInstance().getReference().child("chef").child(chefkey).child("queue").setValue(Integer.toString(que));
+                                        final String dishtime=findtime(Integer.toString(itemind));
 
-                                            for (DataSnapshot postSnapshot5 : postSnapshot1.child("dishes").getChildren()) {
-                                                String d = postSnapshot5.child("dish").getValue(String.class);
-                                                String or = postSnapshot5.child("order_id").getValue(String.class);
-                                       //         Toast.makeText(getBaseContext(), "delete  item " + i.getItemID() + "order item id" + d, Toast.LENGTH_SHORT).show();
-                                                if ((d.equalsIgnoreCase(i.getItemID())) && (or.equalsIgnoreCase(ordind))) {
-                                         //           Toast.makeText(getBaseContext(), "asjdkasdk" + key, Toast.LENGTH_SHORT).show();
-                                                    DatabaseReference An1 = FirebaseDatabase.getInstance().getReference("chef");
-                                                    An1.child(key).child("dishes").child(postSnapshot5.getKey()).removeValue();
-                                                    final myorder m3 = new myorder(n.getOrderId(), i.getItemID(), i2);
-                                                    o.remove(m3);
-                                                    int indexofm3=o.indexOf(m3);
-                                           //         Toast.makeText(getBaseContext(), "IIIIIIIIIIIIIIIIII" + indexofm3, Toast.LENGTH_SHORT).show();
 
-                                                    mAdapter = new order_adapter(order_details.this, o);
-                                                    mAdapter.notifyDataSetChanged();
-                                                    mRecyclerView.setAdapter(mAdapter);
+
+                                        final DatabaseReference chefQueue=FirebaseDatabase.getInstance().getReference().child("chef").child(chefkey);
+                                        chefQueue.addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot1) {
+
+                                                for (DataSnapshot postSnapshot1 : dataSnapshot1.getChildren()) {
+
+                                                    String timechef = postSnapshot1.child("time").getValue(String.class);
+                                                    int caltime=Integer.parseInt(timechef)-Integer.parseInt(dishtime);
+                                                   // reff.child(ordind).child("orderItems").child(Integer.toString(index)).child("required_time").setValue(Integer.toString(caltime));
+                                                    DatabaseReference ref= FirebaseDatabase.getInstance().getReference().child("Orders Queue");
+                                                    ref.child(holder.order.getText().toString()).child("orderItems").child(key11).child("required_time").setValue("0");
+                                                    FirebaseDatabase.getInstance().getReference().child("chef").child(chefkey).child("time").setValue(Integer.toString(caltime));
 
                                                 }
-
                                             }
-                                        }
-                                        else if((n1.speciality.equalsIgnoreCase("desi"))  && queue <30 )// <10
-                                        {
-                                            dish_list2 l=new dish_list2(i.getItemID(),ordind);
+                                                @Override
+                                                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                                            An.child(key).child("dishes").child(uploadId).setValue(l);
-                                            An.child(key).child("queue").setValue(queue+1);
-                                            queue++;
-                                            DatabaseReference reff = FirebaseDatabase.getInstance().getReference().child("Orders Queue");
-                                            reff.child(ordind).child("orderItems").child(Integer.toString(index)).child("status").setValue("2");
-                                            String dishtime=findtime(i.getItemID());
-                                     //       Toast.makeText(getApplicationContext(), dishtime, Toast.LENGTH_SHORT).show();
-                                         int caltime=Integer.parseInt(n1.getTime())+Integer.parseInt(dishtime);
-                                            reff.child(ordind).child("orderItems").child(Integer.toString(index)).child("required_time").setValue(Integer.toString(caltime));
-                                            An.child(key).child("time").setValue(Integer.toString(caltime));
-//                                            Toast.makeText(getBaseContext(),Integer.parseInt(ordind),Toast.LENGTH_SHORT).show();
-                                            //                                          Toast.makeText(getBaseContext(),Integer.parseInt(i.getItemID()),Toast.LENGTH_SHORT).show();
-                                            //     FirebaseDatabase.getInstance().getReference().child("Orders Queue").child(m.orderid).child("orderItems").child(i.getItemID()).child("status").setValue("0");
-                                            // RadioGroup radioButton = findViewById(R.id.rg1);
-                                            //     FirebaseDatabase.getInstance().getReference().child("Orders Queue").child(n.getOrderId()).child("orderItems").child(i.getItemID()).child("status").setValue("0");
+                                                }
+                                            });
 
-                                        }
-                                        else {
-                                            DatabaseReference reff = FirebaseDatabase.getInstance().getReference().child("Orders Queue");
-                                            reff.child(ordind).child("orderItems").child(Integer.toString(index)).child("status").setValue("5");
-                                            //                                          FirebaseDatabase.getInstance().getReference().child("Orders Queue").child(m.orderid).child("orderItems").child(i.getItemID()).child("status").setValue("5");//not assigned
-                                        }
-                                    }
+
+
+
+//                                        Intent intent = new Intent(mContext.getApplicationContext(), chef.class);
+                                        //                                     mContext.startActivity(intent);
+                                    }// final  DatabaseReference An=FirebaseDatabase.getInstance().getReference().child("chef");
                                 }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                }
-                            });
-                            ///////////////////////////////////chef read
-                            mAdapter = new order_adapter(order_details.this, o);
-                            mAdapter.notifyDataSetChanged();
-                            mRecyclerView.setAdapter(mAdapter);
-                        }
-                        Orders.clear();
-
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-
-    }
-    public void loadbalance(View view) {
-
-
-        final List<order> Orders;// list of orders
-        final List<myorder> o;///////
-        final DatabaseReference orderQueue=FirebaseDatabase.getInstance().getReference().child("Orders Queue");
-        Orders=new ArrayList<>();
-
-        o=new ArrayList<>();
-        orderQueue.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Orders.clear();
-                for (final DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    final order n=postSnapshot.getValue(order.class);
-                    Orders.add(n);
-                    //r
-                    //  orderQueue.child(n.getOrderId()).child("order_status").setValue("0");
-                    int s= Integer.valueOf( n.getOrder_status());
-                    if(s!=2)// not complete
-                    {
-                        int size = n.getOrderItems().size();
-                        for (int ii = 0; ii <size; ii++) {
-                            final item i = n.getOrderItems().get(ii);
-                            final String ordind = n.getOrderId();
-                            final int index=ii;
-                            myorder m = new myorder(n.getOrderId(), i.getItemID(), ii);
-                            //,i.;
-                            //   if(m.complete!=2)
-                            o.add(m);
-                            if (i.getStatus().equalsIgnoreCase("5")) {
-                                ///////////////////////////////////chef read "for dish 1 "
-                                final DatabaseReference chefQueue = FirebaseDatabase.getInstance().getReference().child("chef");
-                                chefQueue.addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot1) {
-
-                                        for (DataSnapshot postSnapshot1 : dataSnapshot1.getChildren()) {
-
-                                            chef_list n1 = postSnapshot1.getValue(chef_list.class);
-
-
-                                            DatabaseReference An = FirebaseDatabase.getInstance().getReference("chef");
-                                            String uploadId = An.push().getKey();
-                                            String key = postSnapshot1.getKey();
-                                            Long queue = n1.getQueue();
-                                            if (queue < 30)// <10
-                                            {
-
-                                                dish_list2 l=new dish_list2(i.getItemID(),ordind);
-
-                                                An.child(key).child("dishes").child(uploadId).setValue(l);
-
-                                                Long q = queue+1;
-                                                An.child(key).child("queue").setValue(q);
-
-                                                DatabaseReference reff = FirebaseDatabase.getInstance().getReference().child("Orders Queue");
-                                                reff.child(ordind).child("orderItems").child(Integer.toString(index)).child("status").setValue("0");
-                                                String dishtime=findtime(i.getItemID());
-                                            //    Toast.makeText(getApplicationContext(), dishtime, Toast.LENGTH_SHORT).show();
-                                                int caltime=Integer.parseInt(n1.getTime())+Integer.parseInt(dishtime);
-                                                reff.child(ordind).child("orderItems").child(Integer.toString(index)).child("required_time").setValue(Integer.toString(caltime));
-                                                An.child(key).child("time").setValue(Integer.toString(caltime));
-                                                // RadioGroup radioButton = findViewById(R.id.rg1);
-
-
-                                            }
-                                            //FirebaseDatabase.getInstance().getReference().child("Orders Queue").child(n.getOrderId()).child("orderItems").child(i.getItemID()).child("status").setValue("5");//not assigned
-
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                    }
-                                });
-                                ///////////////////////////////////chef read
 
                             }
                         }
-                        Orders.clear();
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
+                    ref.child(holder.order.getText().toString()).child("orderItems").addListenerForSingleValueEvent(new ValueEventListener() {
+                        boolean ans=true;
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            for (final DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                                // order n=postSnapshot.getValue(order.class);
+                                item i = postSnapshot.getValue(item.class);
+                                if ((i.getStatus().equalsIgnoreCase("2")) != true)
+                                    ans = false;
+
+
+                            }
+                            if (ans == true)
+                            {
+                                ref.child(holder.order.getText().toString()).child("order_status").setValue("2");
+
+                        }
+                }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
+
+
+
 
                     }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
 
@@ -269,28 +170,20 @@ private int i2;
 
 
     }
-    public void callchef(View view){
-        Intent intent = new Intent(this, chef.class);
-        startActivity(intent);
-    }
-    public void callorder(View view){
-        Intent intent = new Intent(this, order_details.class);
-        startActivity(intent);
-    }
-
-    String time="0";
+    String time;
     public String findtime(final String dish1) {
 
-        FirebaseApp.initializeApp(this);
+       // FirebaseApp.initializeApp(this);
         FirebaseDatabase.getInstance().getReference().child("Menu").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
 
             public void onDataChange(DataSnapshot dataSnapshot1) {
                 for (DataSnapshot ds1 : dataSnapshot1.getChildren()) {
-                    String u=ds1.getKey();
-                    if(u.equalsIgnoreCase(dish1)){
+                    menus n1=new menus();
+                    n1=ds1.getValue(menus.class);
+                    if(n1.getuid().equalsIgnoreCase(dish1)){
 
-                     time= (ds1.child("time").getValue(String.class));
+                        time= (n1.getTime());
 
 
 
@@ -301,12 +194,54 @@ private int i2;
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getApplicationContext(), databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+           //
+
 
             }
         });
 
-time="25";
+
         return time;
+    }
+    @Override
+    public int getItemCount() {
+
+        return mUploads.size();
+    }
+
+
+    public class orderViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        public TextView order;
+        public TextView item;
+        public TextView pr;
+        public RadioGroup radioButton;
+
+
+
+        public orderViewHolder(View itemView) {
+            super(itemView);
+            itemView.setOnClickListener(this);
+            order = itemView.findViewById(R.id.orderid);
+            item=itemView.findViewById(R.id.itemid);
+            radioButton = itemView.findViewById(R.id.rg1);
+            lastCheckedRB= itemView.findViewById(R.id.rb1);
+            r1= itemView.findViewById(R.id.rb1);
+            r2= itemView.findViewById(R.id.rb2);
+            r3= itemView.findViewById(R.id.rb3);
+            lastCheckedRB.setEnabled(false);
+
+
+        }
+
+        @Override
+        public void onClick(View v) {
+            int pos = getLayoutPosition();
+            Context context = v.getContext();
+            if (pos == 1) {
+                //   Intent intent = new Intent(context, Book1.class);
+                // context.startActivity(intent);
+            }
+
+        }
     }
 }

@@ -31,8 +31,7 @@
         <activity android:name=".chef_queue" />
         <activity android:name=".chef" />
         <activity android:name=".order_details" />
-        <activity android:name=".MainActivity">
-             
+
 	  <activity android:name=".kitchenManagerCancel" />
         <activity android:name=".cookMain" />
         <activity android:name=".kitchenManagerStatus" />
