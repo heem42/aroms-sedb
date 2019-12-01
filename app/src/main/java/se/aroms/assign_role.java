@@ -51,16 +51,18 @@ public class assign_role extends AppCompatActivity {
                 Query.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        for(DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
-                            String uid = singleSnapshot.getKey();
-                            usersDB.child(uid).child("role").setValue(role);
-                            finish();
-                            Intent i = new Intent(getApplicationContext(),MainActivity.class);
-                            Toast.makeText(getApplicationContext(),"Role assigned Successfully!",Toast.LENGTH_LONG).show();
-                            startActivity(i);
+                        if(dataSnapshot.exists()) {
+                            for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
+                                String uid = singleSnapshot.getKey();
+                                usersDB.child(uid).child("role").setValue(role);
+                                finish();
+                                Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                                Toast.makeText(getApplicationContext(), "Role assigned Successfully!", Toast.LENGTH_LONG).show();
+                                startActivity(i);
+                            }
                         }
-                        Toast.makeText(getApplicationContext(),"Email not found!",Toast.LENGTH_LONG).show();
-                        //detach
+                        else
+                            Toast.makeText(getApplicationContext(),"Email not found!",Toast.LENGTH_LONG).show();
                     }
                     @Override
                     public void onCancelled(DatabaseError databaseError) {

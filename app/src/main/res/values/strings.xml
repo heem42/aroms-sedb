@@ -1,6 +1,6 @@
 <resources>
 
-    <string name="app_name">AROMS</string>
+    <string name="app_name">The Hot Chilli</string>
     <string name="title_activity_main2">Main2Activity</string>
     <string name="tab_text_1">Relative Layout</string>
     <string name="tab_text_2">Constraint Layout</string>
@@ -53,6 +53,7 @@
     </string-array>
 
     <string-array name="roles_arr">
+        <item>Select Role</item>
         <item>Inventory Manager</item>
         <item>Kitchen Manager</item>
         <item>Hall Manager</item>

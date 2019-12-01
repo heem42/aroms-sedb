@@ -82,9 +82,6 @@
         <activity android:name=".Devdroids.BillPayment"/>
         <activity android:name=".specializeMain"/>
         <activity android:name=".Devdroids.EditOrders"></activity>
-
-        
-
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
