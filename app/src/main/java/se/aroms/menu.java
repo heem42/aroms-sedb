@@ -1,10 +1,5 @@
 package se.aroms;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -15,6 +10,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -31,7 +31,7 @@ public class menu extends AppCompatActivity {
     RecyclerView recyclerView;
     DatabaseReference menuDB;
     FirebaseRecyclerOptions options;
-    private FirebaseRecyclerAdapter<menu_item, menu.menuViewHolder> mFirebaseAdapter;
+    private FirebaseRecyclerAdapter<menu_item, menuViewHolder> mFirebaseAdapter;
 
 
     @Override
@@ -49,9 +49,9 @@ public class menu extends AppCompatActivity {
 
         Query query = menuDB.orderByChild("type");
         options = new FirebaseRecyclerOptions.Builder<menu_item>()
-                .setQuery(query,menu_item.class).build();
+                .setQuery(query, menu_item.class).build();
 
-        mFirebaseAdapter = new FirebaseRecyclerAdapter<menu_item, menu.menuViewHolder>(options) {
+        mFirebaseAdapter = new FirebaseRecyclerAdapter<menu_item, menuViewHolder>(options) {
 
             @Override
             protected void onBindViewHolder(menu.menuViewHolder holder, int position, menu_item model) {
@@ -74,12 +74,13 @@ public class menu extends AppCompatActivity {
         ((Button) findViewById(R.id.menu_btn)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(),add_menu.class);
+                Intent i = new Intent(getApplicationContext(), add_menu.class);
                 startActivity(i);
             }
         });
 
     }
+
 
     @Override
     protected void onStop() {
@@ -145,7 +146,7 @@ public class menu extends AppCompatActivity {
             mainLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent i = new Intent(vg.getContext(),edit_dish.class);
+                    Intent i = new Intent(vg.getContext(), edit_dish.class);
 
                     i.putExtra("uid",a.getUid());
                     i.putExtra("name",a.getName());
@@ -156,6 +157,7 @@ public class menu extends AppCompatActivity {
                     i.putExtra("time",a.getTime());
                     i.putExtra("description",a.getDescription());
                     i.putExtra("type",a.getType());
+                    i.putExtra("picture",a.getPicture());
 
                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);;
                     c.startActivity(i);

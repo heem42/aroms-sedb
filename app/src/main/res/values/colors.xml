@@ -20,4 +20,5 @@
     <color name="colorRed">#CC0000</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="Background">#000000</color>
+    <color name="grey">#808080</color>
 </resources>

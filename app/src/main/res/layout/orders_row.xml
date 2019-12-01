@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_margin="10dp"
+    >
+    <TextView
+        android:id="@+id/order_title"
+        android:layout_weight="2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins"
+        android:textColor="@color/black"
+        android:text="Samsung s10+ best phone ever 200 mega pixels dual front black white color"
+        android:layout_gravity="left"
+        android:padding="5dp"/>
+    <TextView
+        android:id="@+id/order_size"
+        android:layout_weight="1"
+        android:layout_width="wrap_content"
+        android:fontFamily="@font/poppins"
+        android:textColor="@color/black"
+        android:text="99"
+        android:layout_height="wrap_content"
+        android:paddingLeft="40dp"
+        android:paddingTop="15dp"/>
+    <TextView
+        android:id="@+id/order_quantity"
+        android:layout_weight="1"
+        android:layout_width="wrap_content"
+        android:fontFamily="@font/poppins"
+        android:textColor="@color/black"
+        android:text="99"
+        android:layout_height="wrap_content"
+        android:paddingLeft="40dp"
+        android:paddingTop="15dp"/>
+</LinearLayout>

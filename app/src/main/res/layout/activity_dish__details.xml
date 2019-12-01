@@ -6,88 +6,167 @@
     android:layout_height="match_parent"
     tools:context=".Devdroids.Dish_Details"
     android:orientation="vertical">
+    <include
+        android:id="@+id/toolbar_menudetail"
+        layout="@layout/toolbar_menudetails"
+        >
+    </include>
     <ScrollView
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-        <androidx.appcompat.widget.AppCompatImageView
-        android:layout_width="match_parent"
-        android:layout_height="250dp"
-            android:id="@+id/dish_detail_img"
-        android:src="@drawable/cherry_pie_slice_small"
-        />
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="50dp"
+                android:layout_marginEnd="50dp"
+                app:cardCornerRadius="15dp">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:id="@+id/dish_detail_img"
+                    android:src="@drawable/cherry_pie_slice_small"
+
+                    />
+            </androidx.cardview.widget.CardView>
+
             <ProgressBar
                 android:id="@+id/dish_detail_progress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"/>
-    <TextView
+         <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="24sp"
         android:id="@+id/dish_detail_name"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+             android:layout_gravity="center"
         />
             <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Description"
-        android:textSize="20sp"
-        android:layout_marginTop="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Description"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="16dp"
+                android:textColor="@color/black"
         />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="14sp"
+        android:textSize="16sp"
         android:id="@+id/dish_detail_desc"
         android:text="Chicken karahi, also known as gosht karahi, and kadai chicken, is a dish from the Indian subcontinent noted for its spicy taste; it is notable in Pakistani and North Indian cuisine."
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:textColor="@color/black"
         />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:text="Price"
-        />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:text="Rs 1000/kg"
-        android:id="@+id/dish_detail_regprice"
-        />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:text="Rs 1000/kg"
-        android:id="@+id/dish_detail_largeprice"
-        />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:text="Cooking Time"
-        />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="45 minutes"
-        android:textSize="14sp"
-        android:id="@+id/dish_detail_cooktime"
-        />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        android:text="Price"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:text="Rs 1000/kg"
+                        android:id="@+id/dish_detail_regprice"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:textColor="@color/black"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:text="Rs 1000/kg"
+                        android:id="@+id/dish_detail_largeprice"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:textColor="@color/black"
+                        />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        android:text="Cooking Time"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:textColor="@color/black"
+                        android:layout_gravity="right"
+                        android:layout_marginRight="10dp"
+                        android:textStyle="bold"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="45 minutes"
+                        android:textSize="14sp"
+                        android:id="@+id/dish_detail_cooktime"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:textColor="@color/black"
+                        android:layout_gravity="right"
+                        android:layout_marginRight="10dp"
+                        />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
     <RadioGroup
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/sizeRadio">
+        android:id="@+id/sizeRadio"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:textColor="@color/black"
+        android:layout_gravity="center">
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Regular"
             android:id="@+id/Regsize"
             android:checked="true"
+            android:textColor="@color/black"
+
             />
         <RadioButton
             android:layout_width="wrap_content"
@@ -95,17 +174,24 @@
             android:text="Large"
             android:id="@+id/Largesize"
             android:checked="false"
+            android:textColor="@color/black"
+
             />
     </RadioGroup>
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:textColor="@color/black"
+        >
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Quantity: "
             android:textSize="20sp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
             />
 
         <EditText
@@ -114,16 +200,25 @@
             android:inputType="number"
             android:singleLine="true"
             android:textSize="20sp"
-            android:text="1" />
+            android:id="@+id/dish_detail_quantity"
+            android:text="1"
+            android:textColor="@color/black"
+            />
     </LinearLayout>
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:text="Add to Cart"
-        android:onClick="onClickCart"
-        android:theme="@style/AppTheme.Button"
-        />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:text="Add to Cart"
+                android:onClick="onClickCart"
+                android:id="@+id/addToCart"
+                android:theme="@style/AppTheme.Button"
+                android:layout_gravity="bottom"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                />
         </LinearLayout>
     </ScrollView>
+
 </LinearLayout>

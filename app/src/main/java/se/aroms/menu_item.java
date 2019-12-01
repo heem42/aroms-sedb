@@ -11,11 +11,14 @@ public class menu_item {
     public String description;
     public String time;
     public String type;
+    public String picture;
 
     menu_item(){}
 
 
-    public menu_item(String uid, String name, String reg_price, String large_price, String reg_price_incurred, String large_price_incurred, String description, String time, String type) {
+
+
+    public menu_item(String uid, String name, String reg_price, String large_price, String reg_price_incurred, String large_price_incurred, String description, String time, String type, String picture) {
         this.uid = uid;
         this.name = name;
         this.reg_price = reg_price;
@@ -25,6 +28,7 @@ public class menu_item {
         this.description = description;
         this.time = time;
         this.type = type;
+        this.picture = picture;
     }
 
     public String getUid() {
@@ -46,6 +50,7 @@ public class menu_item {
     public void setLarge_price_incurred(String large_price_incurred) {
         this.large_price_incurred = large_price_incurred;
     }
+
 
     public String getDescription() {
         return description;
@@ -97,5 +102,13 @@ public class menu_item {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
     }
 }

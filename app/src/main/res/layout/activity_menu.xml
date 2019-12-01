@@ -1,64 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 
-    <LinearLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".menu"
-        android:orientation="vertical"
+    android:orientation="vertical"
     >
 
-        <ScrollView
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
 
             <LinearLayout
+                android:id="@+id/linearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" >
+                android:orientation="horizontal">
 
-                <LinearLayout
-                    android:id="@+id/linearLayout"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_marginStart="112dp"
+                    android:layout_marginTop="26dp"
+                    android:layout_marginBottom="26dp"
+                    android:text="Menu"
+                    android:textSize="24sp" />
 
-                    <TextView
-                        android:id="@+id/textView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="112dp"
-                        android:layout_marginTop="26dp"
-                        android:layout_marginBottom="26dp"
-                        android:text="Menu"
-                        android:textSize="24sp" />
-
-                    <Button
-                        android:id="@+id/menu_btn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginEnd="59dp"
-                        android:fontFamily="@font/poppins"
-                        android:text="Add dish"
-                        android:theme="@style/AppTheme.Button" />
-                </LinearLayout>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/menu_recyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="580dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="8dp" />
-
+                <Button
+                    android:id="@+id/menu_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="59dp"
+                    android:fontFamily="@font/poppins"
+                    android:text="Add dish"
+                    android:theme="@style/AppTheme.Button" />
             </LinearLayout>
-        </ScrollView>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/menu_recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="580dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp" />
+
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>
 

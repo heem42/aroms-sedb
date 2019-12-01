@@ -1,10 +1,14 @@
 package se.aroms.Devdroids;
 
-import java.io.Serializable;
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Orders implements Serializable {
+
+public class Orders implements Parcelable {
     private Date orderTIme;
     private List<orders_items> orderItems;
     private String orderId;//unique order if
@@ -17,9 +21,9 @@ public class Orders implements Serializable {
         this.uid = uid;
         this.status=status;
     }
+public Orders(){
 
-    public Orders(){}
-
+}
     public Date getOrderTIme() {
         return orderTIme;
     }
@@ -58,5 +62,36 @@ public class Orders implements Serializable {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+    public static final Creator<Orders> CREATOR = new Creator<Orders>() {
+        public Orders createFromParcel(Parcel source) {
+            Orders dish = new Orders();
+            dish.orderTIme=(Date)source.readSerializable();
+            dish.orderItems=new ArrayList<orders_items>();
+            source.readList(dish.orderItems,orders_items.class.getClassLoader());
+
+
+            dish.orderId=source.readString();
+            dish.uid=source.readString();
+            dish.status=source.readInt();
+            return dish;
+        }
+
+        public Orders[] newArray(int size) {
+            return new Orders[size];
+        }
+    };
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeSerializable(orderTIme);
+        dest.writeList(orderItems);
+        dest.writeString(orderId);
+        dest.writeString(uid);
+        dest.writeInt(status);
     }
 }

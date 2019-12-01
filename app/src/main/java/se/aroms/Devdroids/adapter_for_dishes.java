@@ -28,8 +28,8 @@ public class adapter_for_dishes extends RecyclerView.Adapter<adapter_for_dishes.
         public TextView dish_reg_price;
         public TextView dish_large_price;
         public ProgressBar progressBar;
-        adapter_for_dishes.OnViewListener onViewListener;
-        public view_holder(View itemView,adapter_for_dishes.OnViewListener onViewListener)  {
+        OnViewListener onViewListener;
+        public view_holder(View itemView, OnViewListener onViewListener)  {
             super(itemView);
             this.onViewListener=onViewListener;
             itemView.setOnClickListener(this);
@@ -70,8 +70,8 @@ public class adapter_for_dishes extends RecyclerView.Adapter<adapter_for_dishes.
             holder.progressBar.setVisibility(View.GONE);
         }
         else {
-            if (current_item.getImg_ids() != null) {
-                Picasso.get().load(current_item.getImg_ids().get(0)).into(viewHolder.dish_image, new Callback() {
+            if (current_item.getPicture() != null) {
+                Picasso.get().load(current_item.getPicture()).fit().centerCrop().into(viewHolder.dish_image, new Callback() {
                     @Override
                     public void onSuccess() {
                         viewHolder.progressBar.setVisibility(View.GONE);
@@ -79,7 +79,8 @@ public class adapter_for_dishes extends RecyclerView.Adapter<adapter_for_dishes.
 
                     @Override
                     public void onError(Exception e) {
-
+                        viewHolder.progressBar.setVisibility(View.GONE);
+                        viewHolder.dish_image.setImageResource(R.drawable.notavailable);
                     }
                 });
             } else {

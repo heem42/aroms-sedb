@@ -49,7 +49,7 @@ public class Ingredients implements Parcelable {
     public int describeContents() {
         return 0;
     }
-    public static final Parcelable.Creator<Ingredients> CREATOR = new Creator<Ingredients>() {
+    public static final Creator<Ingredients> CREATOR = new Creator<Ingredients>() {
         public Ingredients createFromParcel(Parcel source) {
             Ingredients ingredients = new Ingredients();
             ingredients.id = source.readString();

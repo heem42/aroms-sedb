@@ -52,6 +52,23 @@
         <activity android:name=".View_tables" />
         <activity android:name=".Hall_Manager_Main">
         </activity>
+
+
+        <activity android:name=".DevelopersDotCo.SpecializeOrder"/>
+        <activity android:name=".order_details"/>
+        <activity android:name=".Devdroids.SearchableActivity"/>
+        <activity android:name=".chef_edit_row"/>
+        <activity android:name=".chef_edit"/>
+        <activity android:name=".chef"/>
+        <activity android:name=".chef_display"/>
+        <activity android:name=".chef_queue"/>
+        <activity android:name=".chef_display_row"/>
+        <activity android:name=".row"/>
+        <activity android:name=".Devdroids.BillPayment"/>
+        <activity android:name=".specializeMain"/>
+
+
+
         
 
         <meta-data

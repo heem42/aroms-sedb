@@ -4,26 +4,44 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import androidx.appcompat.app.AppCompatActivity;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
+import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 public class edit_dish extends AppCompatActivity {
 
     String uid;
     DatabaseReference menuDB,ingredientDB;
+    private StorageReference mStorageRef;
     Dialog mDialog;
+    private static final int PICK_IMAGE_REQUEST = 1;
+    private Button mButtonChooseImage;
+    private ImageView mImageView;
+    private Uri mImageUri;
+    private StorageTask mUploadTask;
+    String picture;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +59,7 @@ public class edit_dish extends AppCompatActivity {
             String description = i.getStringExtra("description");
             String time = i.getStringExtra("time");
             String type = i.getStringExtra("type");
+            picture = i.getStringExtra("picture");
 
             ((EditText)findViewById(R.id.edit_dish_name)).setText(name);
             ((EditText)findViewById(R.id.edit_dish_regular_price)).setText(reg_price);
@@ -50,6 +69,14 @@ public class edit_dish extends AppCompatActivity {
             ((EditText)findViewById(R.id.edit_dish_time)).setText(time);
             ((EditText)findViewById(R.id.edit_dish_description)).setText(description);
             ((Spinner)findViewById(R.id.edit_dish_spinner)).setSelection(((ArrayAdapter<String>)((Spinner)findViewById(R.id.edit_dish_spinner)).getAdapter()).getPosition(type));
+
+            if(!picture.equals("https://firebasestorage.googleapis.com/v0/b/aroms-9adaf.appspot.com/o/noimage.jpg?alt=media&token=8231970c-160b-4fc7-98f2-c404aab5c647")){
+                ((ProgressBar) findViewById(R.id.edit_dish_progressBar)).setVisibility(View.VISIBLE);
+                Picasso.get()
+                        .load(picture)
+                        .into((ImageView) findViewById(R.id.edit_dish_imageView));
+                ((ProgressBar) findViewById(R.id.edit_dish_progressBar)).setVisibility(View.INVISIBLE);
+            }
 
             FirebaseApp.initializeApp(this);
             menuDB = FirebaseDatabase.getInstance().getReference("Menu/"+uid);
@@ -62,12 +89,78 @@ public class edit_dish extends AppCompatActivity {
                 }
             });
         }
+        //image
+        mButtonChooseImage = findViewById(R.id.edit_dish_add_image_btn);
+        mImageView = findViewById(R.id.edit_dish_imageView);
 
+        mButtonChooseImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openFileChooser();
+            }
+        });
+
+        mStorageRef = FirebaseStorage.getInstance().getReference("dish_uploads");
+
+    }
+
+    private void openFileChooser() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
+                && data != null && data.getData() != null) {
+            mImageUri = data.getData();
+
+            Picasso.get().load(mImageUri).into(mImageView);
+        }
+    }
+
+    private void uploadFile(final String uid,String name,String pic) {
+        if (mImageUri != null) {
+            final StorageReference fileReference = mStorageRef.child(uid+"/"+name);
+
+            if (!pic.equals("https://firebasestorage.googleapis.com/v0/b/aroms-9adaf.appspot.com/o/noimage.jpg?alt=media&token=8231970c-160b-4fc7-98f2-c404aab5c647")){
+                mStorageRef.child(uid).delete();
+            }
+
+            mUploadTask = fileReference.putFile(mImageUri)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                            fileReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    menuDB.child("picture").setValue(uri.toString());
+                                }
+                            });
+
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(edit_dish.this, "Picture upload unsuccessful", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                   ;
+        } else {
+//            Toast.makeText(this, "No file selected", Toast.LENGTH_SHORT).show();
+              //menuDB.child("picture").setValue("https://firebasestorage.googleapis.com/v0/b/aroms-9adaf.appspot.com/o/noimage.jpg?alt=media&token=8231970c-160b-4fc7-98f2-c404aab5c647");
+        }
     }
 
 
     public void onClickBtn(View v) {
-        //((ProgressBar) findViewById(R.id.add_menu_progressBar)).setVisibility(View.VISIBLE);
+        ((ProgressBar) findViewById(R.id.edit_dish_progressBar)).setVisibility(View.VISIBLE);
         EditText a = (EditText) findViewById(R.id.edit_dish_name);
         String name = a.getText().toString();
 
@@ -101,10 +194,12 @@ public class edit_dish extends AppCompatActivity {
             menuDB.child("reg_price_incurred").setValue(reg_price_incurred);
             menuDB.child("large_price_incurred").setValue(large_price_incurred);
 
+            uploadFile(uid,name,picture);
+
             Toast.makeText(this,"Dish updated successfully",Toast.LENGTH_LONG).show();
-            //((ProgressBar) findViewById(R.id.add_menu_progressBar)).setVisibility(View.INVISIBLE);
+            ((ProgressBar) findViewById(R.id.edit_dish_progressBar)).setVisibility(View.INVISIBLE);
             finish();
-            Intent i = new Intent(getApplicationContext(),add_dish_ingredient.class);
+            Intent i = new Intent(getApplicationContext(), add_dish_ingredient.class);
             i.putExtra("uid",uid);
             startActivity(i);
         }
@@ -181,10 +276,10 @@ public class edit_dish extends AppCompatActivity {
     public void onClickBtnDelete(){
         menuDB.removeValue();
         ingredientDB.removeValue();
+        mStorageRef.child(uid).delete();
         Toast.makeText(this,"Dish deleted successfully",Toast.LENGTH_LONG).show();
-        //HAVE TO ADD DELETION OF INVENTORY ITEMS
         finish();
-        Intent i = new Intent(getApplicationContext(),menu.class);
+        Intent i = new Intent(getApplicationContext(), menu.class);
         startActivity(i);
     }
 

@@ -19,6 +19,7 @@
         android:layout_toEndOf="@+id/textView8"
         android:background="@color/colorWhite"
         android:text="Paid"
+
         android:textAlignment="center"
         android:textColor="@color/Background"
         android:textStyle="bold" />
@@ -33,6 +34,7 @@
         android:layout_marginTop="336dp"
         android:layout_toEndOf="@+id/textView8"
         android:background="@color/colorWhite"
+        android:checked="true"
         android:clickable="false"
         android:text="Paid"
         android:textAlignment="center"
@@ -46,7 +48,8 @@
         android:layout_below="@+id/textView9"
         android:layout_marginTop="37dp"
         android:background="@color/colorWhite"
-        android:text="Order no: 11 Amount: Rs. 4520/- "
+        android:text="Order ID: LuE3me_30M2AWIUqdMa
+            Amount: Rs. 4520/- "
         android:textColor="@color/colorRed"
         android:textSize="20sp"
         android:textStyle="bold" />
@@ -58,7 +61,8 @@
         android:layout_below="@+id/textView8"
         android:layout_marginTop="46dp"
         android:background="@color/colorWhite"
-        android:text="Order no: 3 Amount: Rs. 3000/- "
+        android:text="Order ID:LuE3meZJLPgDTVLAu0v
+         Amount: Rs. 3000/- "
         android:textColor="@color/colorRed"
         android:textSize="20sp"
         android:textStyle="bold" />
@@ -88,7 +92,8 @@
         android:layout_below="@+id/textView7"
         android:layout_marginTop="18dp"
         android:background="@color/colorWhite"
-        android:text="Order no: 1 Amount: Rs. 2000/-"
+        android:text="Order ID: LuE3meVyYaPg40AUSe0
+            Amount: Rs. 2000/-"
         android:textColor="@color/colorRed"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -110,18 +115,18 @@
         android:textStyle="bold" />
 
     <CheckBox
-        style="@style/AppTheme.Button"
         android:id="@+id/checkBox"
+        style="@style/AppTheme.Button"
         android:layout_width="134dp"
         android:layout_height="39dp"
         android:layout_below="@+id/textView7"
         android:layout_marginStart="92dp"
         android:layout_marginTop="49dp"
         android:layout_toEndOf="@+id/textView8"
+        android:background="@color/colorWhite"
+        android:checked="true"
         android:text="Paid"
         android:textAlignment="center"
         android:textColor="@color/Background"
-        android:background="@color/colorWhite"
-        android:textStyle="bold"
-        />
+        android:textStyle="bold" />
 </RelativeLayout>

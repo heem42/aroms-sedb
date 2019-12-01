@@ -1,8 +1,9 @@
 package se.aroms;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,26 +35,31 @@ public class chef extends AppCompatActivity {
 
         mRecyclerView = findViewById(R.id.rcv);
         mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mUploads = new ArrayList<>();
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 
-        mAdapter = new chef_adapter(chef.this, mUploads);
-        mAdapter.notifyDataSetChanged();
-        mRecyclerView.setAdapter(mAdapter);
+        mUploads = new ArrayList<>();
+        tv=findViewById(R.id.n);
+     //   mAdapter = new chef_adapter(chef.this, mUploads);
+   //     mAdapter.notifyDataSetChanged();
+   //     mRecyclerView.setAdapter(mAdapter);
 
         FirebaseApp.initializeApp(this);
         FirebaseDatabase.getInstance().getReference().child("chef").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                List<chef_list> listRes = new ArrayList<>();
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    chefs n1=new chefs();
+                            n1.name=ds.getValue(chefs.class).getname();
+                           // tv.setText(n1.getname());
+                            n1.speciality=ds.getValue(chefs.class).getSpeciality();
+                            n1.queue=ds.getValue(chefs.class).getQueue();
+                            n1.setKey(ds.getKey());//chef id
+                      //      n1.setKeyoforder();
+                    //chefs res=new chefs();
 
-                    chefs conversation=new chefs();
-                    conversation.setDish(ds.child("dishes/dishname").getValue(String.class));
-
-
-                    Toast.makeText(getApplicationContext(), "Selected: " + conversation.getDish(), Toast.LENGTH_LONG).show();
-
-                    mUploads.add(conversation);
+                    //chef_list conversation=ds.getValue(chef_list.class);
+                    mUploads.add(n1);
                     mAdapter = new chef_adapter(chef.this, mUploads);
                     mAdapter.notifyDataSetChanged();
                     mRecyclerView.setAdapter(mAdapter);
@@ -63,18 +69,24 @@ public class chef extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getApplicationContext(), databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+         //       Toast.makeText(getApplicationContext(), databaseError.getMessage(), Toast.LENGTH_SHORT).show();
 
             }
         });
 
-
-
-
-
-
     }
 
 
+    public void loadbalance(View view) {
+
+    }
+    public void callchef(View view){
+        Intent intent = new Intent(this, chef.class);
+        startActivity(intent);
+    }
+    public void callorder(View view){
+        Intent intent = new Intent(this, order_details.class);
+        startActivity(intent);
+    }
 }
 

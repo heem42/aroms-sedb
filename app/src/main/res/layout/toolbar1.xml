@@ -14,10 +14,10 @@
 
     <LinearLayout
         android:gravity="center"
-        android:layout_marginTop="32dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        >
 
 
 
@@ -28,13 +28,22 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="30dp"
+                android:src="@drawable/menu"
+                android:onClick="onMenuClick"
 
+
+                />
 
             <ImageView
                 android:id="@+id/search"
-                android:layout_width="50dp"
-                android:layout_height="30dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginTop="5dp"
                 android:src="@drawable/search"
+                android:onClick="onSearchClick"
 
                 />
             </LinearLayout>
@@ -50,13 +59,14 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/round1"
                     android:layout_gravity="center">
+
                     <TextView
-                        android:layout_width="16dp"
-                        android:layout_height="16dp"
-                        android:id="@+id/cartNo1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/cartNo"
                         android:text=" 0"
                         android:layout_gravity="center"
-                        android:textColor="#ffff"
+                        android:textColor="@color/white"
                         android:textSize="12sp"/>
 
                 </LinearLayout>
@@ -67,6 +77,7 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/cart"
                     android:id="@+id/cart_main"
+                    android:onClick="onCartClick"
 
                     />
             </LinearLayout>
@@ -75,7 +86,6 @@
 
 
         </LinearLayout>
-
 
 
 </androidx.appcompat.widget.Toolbar>

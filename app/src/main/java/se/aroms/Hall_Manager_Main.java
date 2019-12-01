@@ -7,6 +7,8 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import se.aroms.DevelopersDotCo.SpecializeOrder;
+
 public class Hall_Manager_Main extends AppCompatActivity {
 
     @Override
@@ -29,7 +31,7 @@ public class Hall_Manager_Main extends AppCompatActivity {
         waiters.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), waiters.class);
+                Intent intent = new Intent(getApplicationContext(), se.aroms.waiters.class);
                 startActivity(intent);
 
             }
@@ -39,7 +41,7 @@ public class Hall_Manager_Main extends AppCompatActivity {
         tablets.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), tablets.class);
+                Intent intent = new Intent(getApplicationContext(), se.aroms.tablets.class);
                 startActivity(intent);
 
             }
@@ -49,7 +51,7 @@ public class Hall_Manager_Main extends AppCompatActivity {
         payment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), payment.class);
+                Intent intent = new Intent(getApplicationContext(), se.aroms.payment.class);
                 startActivity(intent);
 
             }
@@ -72,6 +74,15 @@ public class Hall_Manager_Main extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), Hall_Manager_Main.class);
                 startActivity(intent);
 
+            }
+        });
+
+        Button p_order = findViewById(R.id.prioritize_order);
+        p_order.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getBaseContext(), specializeMain.class);
+                startActivity(i);
             }
         });
 
