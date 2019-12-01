@@ -1,56 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-
     android:layout_height="?attr/actionBarSize"
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-
-    android:theme="@style/AppTheme.Button"
+    android:background="#CC0000"
     android:id="@+id/cart_below_toolbar">
-
-
-
     <LinearLayout
 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center">
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
             android:gravity="center"
             android:orientation="vertical">
-
             <TextView
                 android:id="@+id/cart_totalPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-condensed"
-                android:text="Buy Now"
-                android:textColor="#ffff"
+                android:textColor="@color/white"
+                android:text="Place Order"
                 android:textSize="32sp"
                 android:textStyle="bold"
-                android:onClick="OnBuyClick"/>
+                android:onClick="OnOrderClick"/>
         </LinearLayout>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        </LinearLayout>
+    </LinearLayout>
 
 </androidx.appcompat.widget.Toolbar>
 

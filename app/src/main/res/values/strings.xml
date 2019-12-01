@@ -10,6 +10,9 @@
     <string name="Regular">Regular</string>
     <string name="Category">Complimentary</string>
 
+    <string name="app_label">AROMS</string>
+    <string name="search_hint">Search any dish</string>
+
     <string name="category_types">Choose a category</string>
 
     <string-array name="category_arrays">

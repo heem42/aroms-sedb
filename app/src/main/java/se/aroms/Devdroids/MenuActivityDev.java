@@ -273,7 +273,7 @@ public class MenuActivityDev extends AppCompatActivity implements adapter_for_di
         startActivity(intent);
     }
     public void onSearchClick(View v){
-        Toast.makeText(context,"orking",Toast.LENGTH_SHORT).show();
+        //Toast.makeText(context,"orking",Toast.LENGTH_SHORT).show();
         onSearchRequested();
 
     }
