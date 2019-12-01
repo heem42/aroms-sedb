@@ -1,41 +1,13 @@
 package se.aroms;
 
-import android.content.Intent;
-import android.support.annotation.NonNull;
-
-import android.os.Bundle;
-
-import android.view.View;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.GenericTypeIndicator;
-import com.google.firebase.database.ValueEventListener;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import java.util.List;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.app.AppCompatActivity;
@@ -78,14 +50,28 @@ import android.widget.Button;
 
 import java.util.ArrayList;
 import java.util.List;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-public class chef extends AppCompatActivity {
+public class chef_edit extends AppCompatActivity {
     private DatabaseReference mDatabaseRef;
     private RecyclerView mRecyclerView;
-    private chef_adapter mAdapter;
+    private chef_edit_adapter mAdapter;
     TextView tv;
     private List<chefs> mUploads;
     private DatabaseReference mDatabase;
@@ -93,36 +79,36 @@ public class chef extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chef);
-
+        setContentView(R.layout.activity_chef_edit);
+        Intent i=getIntent();
+    //    Toast.makeText(getApplicationContext(),"itemname"+i.getStringExtra("itemnane"),Toast.LENGTH_SHORT).show();
+      //  Toast.makeText(getApplicationContext(),"itemid"+i.getStringExtra("dishid"),Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(),"chefis"+i.getStringExtra("chefid"),Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(),"orderid"+i.getStringExtra("orderid"),Toast.LENGTH_SHORT).show();
+final dishlist3 storeinadapter=new dishlist3();
+        storeinadapter.setDishid(i.getStringExtra("dishid"));
+        storeinadapter.setDish(i.getStringExtra("itemnane"));
+        storeinadapter.setChefid(i.getStringExtra("chefid"));
+        storeinadapter.setOrderid(i.getStringExtra("orderid"));
         mRecyclerView = findViewById(R.id.rcv);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 
         mUploads = new ArrayList<>();
-tv=findViewById(R.id.n);
-     //   mAdapter = new chef_adapter(chef.this, mUploads);
-   //     mAdapter.notifyDataSetChanged();
-   //     mRecyclerView.setAdapter(mAdapter);
 
         FirebaseApp.initializeApp(this);
         FirebaseDatabase.getInstance().getReference().child("chef").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                List<chef_list> listRes = new ArrayList<>();
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     chefs n1=new chefs();
-                            n1.name=ds.getValue(chefs.class).getname();
-                           // tv.setText(n1.getname());
-                            n1.speciality=ds.getValue(chefs.class).getSpeciality();
-                            n1.queue=ds.getValue(chefs.class).getQueue();
-                            n1.setKey(ds.getKey());//chef id
-                      //      n1.setKeyoforder();
-                    //chefs res=new chefs();
-
-                    //chef_list conversation=ds.getValue(chef_list.class);
+                    n1.name=ds.getValue(chefs.class).getname();
+                    n1.speciality=ds.getValue(chefs.class).getSpeciality();
+                    n1.queue=ds.getValue(chefs.class).getQueue();
+                    n1.setKey(ds.getKey());//chef id
                     mUploads.add(n1);
-                    mAdapter = new chef_adapter(chef.this, mUploads);
+
+                    mAdapter = new chef_edit_adapter(chef_edit.this, mUploads,storeinadapter);
                     mAdapter.notifyDataSetChanged();
                     mRecyclerView.setAdapter(mAdapter);
                 }
@@ -131,24 +117,12 @@ tv=findViewById(R.id.n);
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-         //       Toast.makeText(getApplicationContext(), databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), databaseError.getMessage(), Toast.LENGTH_SHORT).show();
 
             }
         });
 
     }
 
-
-    public void loadbalance(View view) {
-
-    }
-    public void callchef(View view){
-        Intent intent = new Intent(this, chef.class);
-        startActivity(intent);
-    }
-    public void callorder(View view){
-        Intent intent = new Intent(this, order_details.class);
-        startActivity(intent);
-    }
 }
 

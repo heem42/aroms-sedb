@@ -18,7 +18,17 @@
         <activity android:name=".SalesReport" />
         <activity android:name=".MainActivity" />
         <activity android:name=".add_user"></activity>
+        <activity android:name=".row"></activity>
+        <activity android:name=".chef_display" />
+        <activity android:name=".chef_display_row" />
+        <activity android:name=".chef_edit_row" />
+        <activity android:name=".chef_edit" />
+        <activity android:name=".queue_row" />
+        <activity android:name=".chef_queue" />
+        <activity android:name=".chef" />
+        <activity android:name=".order_details" />
         <activity android:name=".Login">
+
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
