@@ -58,6 +58,18 @@
         </activity>
 
 
+        <activity android:name=".kitchen_manager"/>
+        <activity android:name=".chef"/>
+        <activity android:name=".chef_display"/>
+        <activity android:name=".chef_edit"/>
+        <activity android:name=".chef_queue"/>
+        <activity android:name=".row"/>
+        <activity android:name=".chef_display_row"/>
+        <activity android:name=".chef_edit_row"/>
+        <activity android:name=".queue_row"/>
+
+
+
         <activity android:name=".DevelopersDotCo.SpecializeOrder"/>
         <activity android:name=".order_details"/>
         <activity android:name=".Devdroids.SearchableActivity">
@@ -82,6 +94,8 @@
         <activity android:name=".Devdroids.BillPayment"/>
         <activity android:name=".specializeMain"/>
         <activity android:name=".Devdroids.EditOrders"></activity>
+
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

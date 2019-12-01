@@ -5,6 +5,12 @@ public class menuc {
     String name;
     String type;
 
+    String time;
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
     public String getType() {
         return type;
     }
@@ -13,6 +19,9 @@ public class menuc {
         this.type = type;
     }
 
+    public String getTime() {
+        return time;
+    }
 
     public menuc(String menuid, String n) {
         this.uid = menuid;

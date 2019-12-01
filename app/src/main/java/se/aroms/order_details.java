@@ -6,10 +6,18 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.app.AppCompatActivity;
+
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DataSnapshot;
@@ -17,6 +25,26 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import androidx.appcompat.app.AppCompatActivity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import androidx.annotation.NonNull;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import androidx.appcompat.app.AppCompatActivity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,7 +92,7 @@ public class order_details extends AppCompatActivity {
                             final item i = n.getOrderItems().get(ii);
                             final String ordind=n.getOrderId();
                             final int index=ii;
-                            final myorder m = new myorder(n.getOrderId(), i.getItemID(),ii);
+                            final   myorder m = new myorder(n.getOrderId(), i.getItemID(),ii);
                             o.add(m);
                             ///////////////////////////////////chef read "for dish 1 "
                             final DatabaseReference chefQueue=FirebaseDatabase.getInstance().getReference().child("chef");
@@ -289,7 +317,7 @@ public class order_details extends AppCompatActivity {
             }
         });
 
-        time="25";
+        time="28";
         return time;
     }
 }
