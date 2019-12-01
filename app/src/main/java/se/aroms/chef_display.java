@@ -1,7 +1,6 @@
 package se.aroms;
 
 import android.content.Intent;
-
 import android.os.Bundle;
 
 import android.util.Log;

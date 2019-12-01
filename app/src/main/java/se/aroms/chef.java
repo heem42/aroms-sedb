@@ -1,7 +1,7 @@
 package se.aroms;
 
 import android.content.Intent;
-import android.support.annotation.NonNull;
+
 
 import android.os.Bundle;
 
@@ -18,7 +18,7 @@ import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
